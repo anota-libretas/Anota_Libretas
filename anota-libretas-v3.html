@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Anota Libretas — Personalizá tu libreta</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red:        #a32d29;
+    --red-light:  #c74340;
+    --blue:       #5ab8bf;
+    --peach:      #fddca6;
+    --peach-dark: #f8c876;
+    --carbon:     #2c2c2c;
+    --carbon-soft:#3f3f3f;
+    --cream:      #fdf8f2;
+    --white:      #ffffff;
+    --border:     rgba(44,44,44,0.12);
+    --shadow:     0 4px 24px rgba(44,44,44,0.10);
+    --shadow-lg:  0 12px 48px rgba(44,44,44,0.16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--carbon); min-height: 100vh; overflow-x: hidden; }
+
+  /* HEADER */
+  header { background: var(--red); position: relative; overflow: hidden; }
+  header::before { content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px; background:var(--red-light); border-radius:50%; opacity:0.4; }
+  header::after  { content:''; position:absolute; bottom:-40px; left:40px; width:160px; height:160px; background:var(--peach); border-radius:50%; opacity:0.15; }
+  .header-inner  { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:36px 22px 30px; display:flex; align-items:flex-end; gap:18px; }
+  .logo-mark     { width:52px; height:52px; background:var(--peach); border-radius:14px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:24px; color:var(--red); font-weight:700; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+  .header-text h1{ font-family:'Playfair Display',serif; font-size:clamp(20px,5vw,30px); color:var(--white); letter-spacing:-0.5px; line-height:1.1; }
+  .header-text p { color:rgba(255,255,255,0.72); font-size:12px; margin-top:4px; font-weight:300; }
+  .progress-bar-wrap { background:var(--red-light); height:4px; }
+  .progress-bar-fill { height:4px; background:var(--peach); transition:width 0.5s cubic-bezier(.4,0,.2,1); width:0%; }
+
+  main { max-width:780px; margin:0 auto; padding:20px 14px 60px; display:flex; flex-direction:column; gap:14px; }
+
+  /* CARDS */
+  .card { background:var(--white); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); animation:fadeSlideIn 0.4s ease both; }
+  .card:nth-child(1){animation-delay:.05s} .card:nth-child(2){animation-delay:.10s} .card:nth-child(3){animation-delay:.15s} .card:nth-child(4){animation-delay:.20s} .card:nth-child(5){animation-delay:.25s}
+  .card-header { background:var(--blue); padding:13px 18px; display:flex; align-items:center; gap:11px; }
+  .card-header.done { background:var(--red); }
+  .step-badge { width:26px; height:26px; background:rgba(255,255,255,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:var(--white); flex-shrink:0; }
+  .card-header h2 { font-family:'Playfair Display',serif; font-size:16px; color:var(--white); font-weight:700; }
+  .card-header .check { margin-left:auto; width:22px; height:22px; background:rgba(255,255,255,0.9); border-radius:50%; display:none; align-items:center; justify-content:center; color:var(--red); font-size:12px; font-weight:700; }
+  .card-header.done .check { display:flex; }
+  .card-body { padding:16px 18px 18px; display:flex; flex-direction:column; gap:12px; }
+
+  /* SELECTS */
+  .select-col { display:flex; flex-direction:column; gap:10px; }
+  .select-group { display:flex; flex-direction:column; gap:5px; }
+  .select-group label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.7px; color:var(--blue); }
+  .select-group label .lvl { color:var(--peach-dark); margin-right:3px; }
+
+  /* CLAVE: select nunca disabled en iOS — usamos pointer-events y opacity visual */
+  select {
+    width:100%; padding:12px 38px 12px 14px;
+    border:1.5px solid var(--border); border-radius:10px;
+    font-family:'DM Sans',sans-serif; font-size:16px; /* 16px evita zoom en iOS */
+    color:var(--carbon); background:var(--cream);
+    -webkit-appearance:none; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235ab8bf' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center;
+    cursor:pointer; transition:border-color 0.2s; touch-action:manipulation;
+  }
+  select:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(90,184,191,0.15); }
+  /* Estado inactivo: visual pero SIN disabled (iOS no dispara change en selects disabled) */
+  select.inactive { opacity:0.4; pointer-events:none; background-color:#f0f0f0; }
+  select.active   { border-color:var(--blue); background-color:rgba(90,184,191,0.05); }
+
+  .gramaje-display { padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:14px; color:var(--carbon-soft); background:#f5f5f5; font-family:'DM Sans',sans-serif; font-style:italic; }
+
+  /* LINK REFERENCIA */
+  .ref-link { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--red); text-decoration:none; font-weight:500; padding:7px 13px; background:rgba(163,45,41,0.07); border-radius:20px; align-self:flex-start; touch-action:manipulation; }
+  .ref-link::before { content:'🔗'; font-size:11px; }
+
+  /* CANVA BANNER */
+  .canva-banner { background:linear-gradient(135deg,rgba(90,184,191,0.1),rgba(253,220,166,0.2)); border:1.5px dashed var(--blue); border-radius:12px; padding:14px 15px; display:none; align-items:flex-start; gap:10px; }
+  .canva-banner.visible { display:flex; }
+  .canva-banner .icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+  .canva-banner p { font-size:13px; line-height:1.5; }
+  .canva-banner a { color:var(--red); font-weight:600; }
+
+  /* ACCESORIOS — rediseño sin conflicto de eventos */
+  .accesorio-item { border:1.5px solid var(--border); border-radius:12px; overflow:hidden; transition:border-color 0.2s, background 0.2s; margin-bottom:2px; }
+  .accesorio-item.selected { border-color:var(--blue); background:rgba(90,184,191,0.04); }
+
+  .acc-header {
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    touch-action:manipulation;
+    -webkit-user-select:none; user-select:none;
+    min-height:52px; /* área táctil generosa */
+  }
+  .acc-header:active { background:rgba(90,184,191,0.08); }
+
+  .toggle-switch { width:40px; height:24px; background:#ddd; border-radius:12px; position:relative; transition:background 0.25s; flex-shrink:0; pointer-events:none; }
+  .toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; background:white; border-radius:50%; transition:left 0.25s; box-shadow:0 1px 4px rgba(0,0,0,0.25); }
+  .accesorio-item.selected .toggle-switch { background:var(--blue); }
+  .accesorio-item.selected .toggle-switch::after { left:19px; }
+
+  .accesorio-name { font-size:14px; font-weight:500; line-height:1.3; pointer-events:none; }
+
+  .acc-muestra {
+    font-size:11px; color:var(--red); font-weight:600;
+    padding:5px 10px; background:rgba(163,45,41,0.08); border-radius:16px;
+    white-space:nowrap; pointer-events:none; /* el click lo maneja acc-header */
+    flex-shrink:0;
+  }
+
+  .accesorio-detail { display:none; padding:0 16px 14px; }
+  .accesorio-item.selected .accesorio-detail { display:block; }
+
+  /* RESUMEN */
+  .precio-section { background:var(--white); border-radius:16px; overflow:hidden; box-shadow:var(--shadow-lg); }
+  .precio-header { background:var(--red); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .precio-header h2 { font-family:'Playfair Display',serif; font-size:19px; color:var(--white); }
+  .precio-total-badge { background:var(--peach); color:var(--red); font-family:'Playfair Display',serif; font-size:19px; font-weight:700; padding:5px 14px; border-radius:30px; white-space:nowrap; }
+  .precio-body { padding:16px 18px; }
+  .resumen-lista { display:flex; flex-direction:column; gap:7px; margin-bottom:16px; }
+  .resumen-item { display:flex; justify-content:space-between; align-items:flex-start; font-size:13px; padding:8px 11px; background:var(--cream); border-radius:8px; gap:8px; }
+  .resumen-item .ri-left { display:flex; flex-direction:column; gap:2px; flex:1; }
+  .resumen-item .label { color:var(--carbon-soft); font-size:11px; }
+  .resumen-item .valor { font-weight:600; color:var(--carbon); font-size:13px; }
+  .resumen-item .precio-item { font-weight:700; color:var(--red); min-width:70px; text-align:right; flex-shrink:0; font-size:13px; }
+  .resumen-divider { height:1px; background:var(--border); margin:3px 0; }
+  .resumen-total-row { display:flex; justify-content:space-between; align-items:center; padding:12px 11px; background:rgba(163,45,41,0.06); border-radius:10px; border:1.5px solid rgba(163,45,41,0.15); }
+  .resumen-total-row .total-label { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .resumen-total-row .total-precio { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--red); }
+  .precio-nota { font-size:11px; color:#888; margin-top:10px; text-align:center; font-style:italic; line-height:1.5; }
+
+  .btn-row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  .btn { flex:1; min-width:130px; padding:14px 16px; border:none; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; touch-action:manipulation; }
+  .btn-primary { background:var(--red); color:white; box-shadow:0 4px 14px rgba(163,45,41,0.35); }
+  .btn-secondary { background:var(--peach); color:var(--carbon); }
+
+  .empty-hint { font-size:12px; color:#999; font-style:italic; padding:4px 0 0 2px; display:none; }
+
+  @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @media print { header::before,header::after{display:none} .card,.precio-section{box-shadow:none;border:1px solid #ddd} .btn-row{display:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-mark">A</div>
+    <div class="header-text">
+      <h1>Anota Libretas</h1>
+      <p>Personalizá tu libreta o agenda ✦ cada detalle, a tu gusto</p>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+</header>
+
+<main>
+
+  <!-- 1. MATERIAL -->
+  <div class="card">
+    <div class="card-header" id="header-material">
+      <div class="step-badge">1</div><h2>Material de tapa</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <div class="select-col">
+        <div class="select-group">
+          <label><span class="lvl">◆</span>Material</label>
+          <select id="mat" onchange="onMatChange()">
+            <option value="">— Elegí —</option>
+            <option value="Crea cruda" selected>Crea cruda</option>
+            <option value="Lino">Lino</option>
+            <option value="Lino velvet">Lino velvet</option>
+            <option value="Ecocuero">Ecocuero</option>
+            <option value="Papel impreso">Papel impreso</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label><span class="lvl">▸</span>Sub-opción</label>
+          <select id="mat-sub1" onchange="onMatSub1Change()" class="inactive">
+            <option value="">— Primero elegí material —</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label><span class="lvl">◦</span>Variante / Color</label>
+          <select id="mat-sub2" onchange="updateResumen()" class="inactive">
+            <option value="">— Primero elegí sub-opción —</option>
+          </select>
+          <p class="empty-hint" id="hint-mat-sub2">Esta opción no tiene variantes de color.</p>
+        </div>
+      </div>
+      <a href="#" class="ref-link" onclick="return false">Ver muestras de materiales</a>
+    </div>
+  </div>
+
+  <!-- 2. TAMAÑO -->
+  <div class="card">
+    <div class="card-header" id="header-tamanio">
+      <div class="step-badge">2</div><h2>Tamaño de la libreta</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <div class="select-col">
+        <div class="select-group">
+          <label><span class="lvl">◆</span>Tamaño</label>
+          <select id="tamanio" onchange="onTamanioChange()">
+            <option value="mm" selected>Medio-Medio Oficio — 165×108mm</option>
+            <option value="a5">A5 — 210×148mm</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label><span class="lvl">◆</span>Gramaje incluido</label>
+          <div class="gramaje-display" id="gramaje-display">70 gr/m² (incluido en el precio)</div>
+        </div>
+      </div>
+      <a href="#" class="ref-link" onclick="return false">Ver referencia de tamaños</a>
+    </div>
+  </div>
+
+  <!-- 3. HOJAS -->
+  <div class="card">
+    <div class="card-header" id="header-hojas">
+      <div class="step-badge">3</div><h2>Cantidad de hojas</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <div class="select-group">
+        <label><span class="lvl">◆</span>Cantidad</label>
+        <select id="hojas" onchange="updateResumen()">
+          <option value="105">105 hojas — 208 páginas</option>
+          <option value="80" selected>80 hojas — 160 páginas</option>
+          <option value="64">64 hojas — 128 páginas</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. DISEÑO HOJAS -->
+  <div class="card">
+    <div class="card-header" id="header-pers-hojas">
+      <div class="step-badge">4</div><h2>Diseño de las hojas</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <div class="select-col">
+        <div class="select-group">
+          <label><span class="lvl">◆</span>Tipo de personalización</label>
+          <select id="pers-hojas" onchange="onPersHojasChange()">
+            <option value="blancas">Hojas blancas</option>
+            <option value="base">Usar solo una base</option>
+            <option value="patron" selected>Personalizar patrón (hasta 6)</option>
+            <option value="todas">Personalizar todas las hojas</option>
+          </select>
+        </div>
+        <div class="select-group" id="group-base-selector" style="display:none">
+          <label><span class="lvl">▸</span>Elegí la base</label>
+          <select id="base-selector" onchange="updateResumen()">
+            <option value="Base 1 - Agenda 2026">Base 1 — Agenda 2026</option>
+            <option value="Base 2 - Cuadriculado">Base 2 — Cuadriculado</option>
+            <option value="Otra base">Otra base (consultar)</option>
+          </select>
+        </div>
+      </div>
+      <div class="canva-banner visible" id="canva-banner">
+        <div class="icon">🎨</div>
+        <p>Para personalizar las hojas, descargá la <a href="#" onclick="return false">base de Canva</a> y editala a tu gusto. Después enviala junto con tu pedido.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ACCESORIOS -->
+  <div class="card">
+    <div class="card-header" id="header-accesorios">
+      <div class="step-badge">5</div><h2>Accesorios opcionales</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:13px;color:#888;">Tocá para activar los accesorios que querés sumar.</p>
+
+      <div class="accesorio-item" id="acc-esq3">
+        <div class="acc-header" onclick="toggleAcc('esq3')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Esquineras 3×3 cm</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Plateado</option><option>Dorado</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-esq15">
+        <div class="acc-header" onclick="toggleAcc('esq15')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Esquineras 1.5×1.5 cm</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Plateado</option><option>Dorado</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-cierre">
+        <div class="acc-header" onclick="toggleAcc('cierre')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Cierre elástico</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-portalapiz">
+        <div class="acc-header" onclick="toggleAcc('portalapiz')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Elástico portalápiz</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-porta-cierre">
+        <div class="acc-header" onclick="toggleAcc('porta-cierre')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Portalápiz en cierre elástico</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-cinta">
+        <div class="acc-header" onclick="toggleAcc('cinta')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Cinta marcapáginas</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Rojo</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-hk">
+        <div class="acc-header" onclick="toggleAcc('hk')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Dije Hello Kitty (impreso en 3D)</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Rosado</option><option>Blanco</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-texto">
+        <div class="acc-header" onclick="toggleAcc('texto')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Dije "Texto 2026" (impreso en 3D)</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Dorado</option><option>Plateado</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="accesorio-item" id="acc-llavero">
+        <div class="acc-header" onclick="toggleAcc('llavero')">
+          <div class="toggle-switch"></div>
+          <span class="accesorio-name">Elástico para colgar llaveros</span>
+          <span class="acc-muestra">🔗 Ver muestra</span>
+        </div>
+        <div class="accesorio-detail">
+          <div class="select-group">
+            <label><span class="lvl">◦</span>Color</label>
+            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="precio-section">
+    <div class="precio-header">
+      <h2>Tu pedido</h2>
+      <div class="precio-total-badge" id="total-badge">$ —</div>
+    </div>
+    <div class="precio-body">
+      <div class="resumen-lista" id="resumen-lista"></div>
+      <p class="precio-nota">⚠️ Los precios son orientativos. Confirmá el total con Anota Libretas antes de hacer el pedido.</p>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="copiarResumen()">📋 Copiar resumen</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Guardar PDF</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── PRECIOS (CLP) ─────────────────────────────────────────────
+const P = {
+  base:2300, crea_sinte:500, crea_veg:900, lino:800, lino_velvet:1000, eco:1000,
+  papel_solido:800, papel_imagen:700, tam_mm:0, tam_a5:200,
+  hoj_mm_64:900, hoj_mm_80:1000, hoj_mm_105:1500,
+  hoj_a5_64:1800, hoj_a5_80:2000, hoj_a5_105:2700,
+  ph_blancas:0, ph_base:500, ph_patron:900, ph_todas:1500,
+  esq3:1500, esq15:1000, cierre:800, portalapiz:500, porta_cierre:700,
+  cinta:500, dije:700, llavero:400,
+};
+
+// ── DATOS CASCADA ─────────────────────────────────────────────
+const matSub1 = {
+  'Crea cruda':    ['Sin teñir','Color vegetal'],
+  'Lino':          ['Color sólido','Patrones','Lino grueso sólido'],
+  'Lino velvet':   ['Color sólido'],
+  'Ecocuero':      ['Café claro','Negro','Etc... (consultar)'],
+  'Papel impreso': ['Color sólido','Imagen','Color tela del lomo'],
+};
+const matSub2 = {
+  'Crea cruda|Sin teñir':              null,
+  'Crea cruda|Color vegetal':          ['Naranja','Rojo','Etc... (consultar)'],
+  'Lino|Color sólido':                 ['Beige','Etc... (consultar)'],
+  'Lino|Patrones':                     ['Franjas rojas y blancas','Etc... (consultar)'],
+  'Lino|Lino grueso sólido':           ['Blanco','Etc... (consultar)'],
+  'Lino velvet|Color sólido':          ['Etc... (consultar)'],
+  'Ecocuero|Café claro':               null,
+  'Ecocuero|Negro':                    null,
+  'Ecocuero|Etc... (consultar)':       null,
+  'Papel impreso|Color sólido':        null,
+  'Papel impreso|Imagen':              null,
+  'Papel impreso|Color tela del lomo': ['Celeste','Blanco','Etc... (consultar)'],
+};
+const matDef  = {'Crea cruda':'Sin teñir','Lino':'Color sólido','Lino velvet':'Color sólido','Ecocuero':'Café claro','Papel impreso':'Imagen'};
+const sub2Def = {'Crea cruda|Color vegetal':'Rojo','Lino|Color sólido':'Beige','Lino|Patrones':'Franjas rojas y blancas','Lino|Lino grueso sólido':'Blanco','Papel impreso|Color tela del lomo':'Blanco'};
+
+// ── HELPERS SELECTOR ──────────────────────────────────────────
+function setActive(sel, active) {
+  sel.classList.toggle('inactive', !active);
+  sel.classList.toggle('active', active);
+}
+function poblarSelect(sel, opciones, defVal) {
+  sel.innerHTML = '';
+  opciones.forEach(o => {
+    const op = document.createElement('option');
+    op.value = o; op.textContent = o; sel.appendChild(op);
+  });
+  if (defVal && sel.querySelector(`option[value="${defVal}"]`)) sel.value = defVal;
+}
+
+// ── CASCADA MATERIAL ──────────────────────────────────────────
+function onMatChange() {
+  const mat  = document.getElementById('mat').value;
+  const s1   = document.getElementById('mat-sub1');
+  const s2   = document.getElementById('mat-sub2');
+  const hint = document.getElementById('hint-mat-sub2');
+
+  hint.style.display = 'none';
+  s1.innerHTML = '<option value="">— Elegí sub-opción —</option>';
+  s2.innerHTML = '<option value="">— Elegí variante —</option>';
+  setActive(s1, false); setActive(s2, false);
+
+  if (!mat) { updateResumen(); return; }
+
+  poblarSelect(s1, matSub1[mat] || [], matDef[mat]);
+  setActive(s1, true);
+  onMatSub1Change();
+}
+
+function onMatSub1Change() {
+  const mat  = document.getElementById('mat').value;
+  const sub1 = document.getElementById('mat-sub1').value;
+  const s2   = document.getElementById('mat-sub2');
+  const hint = document.getElementById('hint-mat-sub2');
+
+  hint.style.display = 'none';
+  s2.innerHTML = '<option value="">— Elegí variante —</option>';
+  setActive(s2, false);
+
+  if (!sub1) { updateResumen(); return; }
+
+  const key  = mat + '|' + sub1;
+  const opts = matSub2[key];
+
+  if (!opts) {
+    hint.style.display = 'block';
+    updateResumen(); return;
+  }
+  poblarSelect(s2, opts, sub2Def[key]);
+  setActive(s2, true);
+  updateResumen();
+}
+
+// ── TAMAÑO ────────────────────────────────────────────────────
+function onTamanioChange() {
+  const t = document.getElementById('tamanio').value;
+  document.getElementById('gramaje-display').textContent =
+    t === 'a5' ? '75 gr/m² (incluido en el precio)' : '70 gr/m² (incluido en el precio)';
+  updateResumen();
+}
+
+// ── DISEÑO HOJAS ──────────────────────────────────────────────
+function onPersHojasChange() {
+  const v = document.getElementById('pers-hojas').value;
+  document.getElementById('group-base-selector').style.display = v === 'base' ? 'block' : 'none';
+  document.getElementById('canva-banner').classList.toggle('visible', v === 'patron' || v === 'todas');
+  updateResumen();
+}
+
+// ── ACCESORIOS ────────────────────────────────────────────────
+function toggleAcc(id) {
+  document.getElementById('acc-' + id).classList.toggle('selected');
+  updateResumen();
+}
+
+const ACC_LIST = [
+  {id:'esq3',        label:'Esquineras 3×3 cm',             pk:'esq3'},
+  {id:'esq15',       label:'Esquineras 1.5×1.5 cm',         pk:'esq15'},
+  {id:'cierre',      label:'Cierre elástico',                pk:'cierre'},
+  {id:'portalapiz',  label:'Elástico portalápiz',            pk:'portalapiz'},
+  {id:'porta-cierre',label:'Portalápiz en cierre elástico',  pk:'porta_cierre'},
+  {id:'cinta',       label:'Cinta marcapáginas',             pk:'cinta'},
+  {id:'hk',          label:'Dije Hello Kitty',               pk:'dije'},
+  {id:'texto',       label:'Dije Texto 2026',                pk:'dije'},
+  {id:'llavero',     label:'Elástico para colgar llaveros',  pk:'llavero'},
+];
+function getAccSel() {
+  return ACC_LIST.filter(a => document.getElementById('acc-'+a.id)?.classList.contains('selected'));
+}
+
+// ── PRECIOS ───────────────────────────────────────────────────
+function getPMat() {
+  const mat = document.getElementById('mat').value;
+  const s1  = document.getElementById('mat-sub1').value;
+  if (!mat) return 0;
+  if (mat === 'Crea cruda')    return s1 === 'Sin teñir' ? P.crea_sinte : P.crea_veg;
+  if (mat === 'Lino')          return P.lino;
+  if (mat === 'Lino velvet')   return P.lino_velvet;
+  if (mat === 'Ecocuero')      return P.eco;
+  if (mat === 'Papel impreso') return s1 === 'Color sólido' ? P.papel_solido : P.papel_imagen;
+  return 0;
+}
+function getPTam()   { return document.getElementById('tamanio').value === 'a5' ? P.tam_a5 : P.tam_mm; }
+function getPHojas() {
+  const t = document.getElementById('tamanio').value;
+  const h = document.getElementById('hojas').value;
+  return P['hoj_' + (t === 'a5' ? 'a5' : 'mm') + '_' + h] || 0;
+}
+function getPPerso() { return P['ph_' + document.getElementById('pers-hojas').value] || 0; }
+function fmt(n) { return n ? '$ ' + n.toLocaleString('es-CL') : '$ —'; }
+
+// ── RESUMEN ───────────────────────────────────────────────────
+function updateResumen() {
+  const lista = document.getElementById('resumen-lista');
+  lista.innerHTML = '';
+
+  const mat    = document.getElementById('mat').value || '—';
+  const sub1   = document.getElementById('mat-sub1').value || '';
+  const sub2   = document.getElementById('mat-sub2').value || '';
+  const tam    = document.getElementById('tamanio').value;
+  const tamLbl = tam === 'a5' ? 'A5 — 210×148mm' : 'Medio-Medio Oficio — 165×108mm';
+  const gLbl   = tam === 'a5' ? '75 gr/m²' : '70 gr/m²';
+  const hojSel = document.getElementById('hojas');
+  const hojLbl = hojSel.options[hojSel.selectedIndex]?.text || '';
+  const phSel  = document.getElementById('pers-hojas');
+  const phLbl  = phSel.options[phSel.selectedIndex]?.text || '';
+  const bSel   = document.getElementById('base-selector');
+  const phDisp = phSel.value === 'base' ? phLbl + ': ' + (bSel.options[bSel.selectedIndex]?.text || '') : phLbl;
+  const matLbl = [mat, sub1, sub2].filter(Boolean).join(' › ');
+
+  const pM = getPMat(), pT = getPTam(), pH = getPHojas(), pP = getPPerso();
+  let total  = P.base + pM + pT + pH + pP;
+
+  const rows = [
+    {label:'Armado y encuadernación', valor:'Precio base',              precio:P.base},
+    {label:'Material de tapa',        valor:matLbl,                     precio:pM},
+    {label:'Tamaño',                  valor:tamLbl,                     precio:pT},
+    {label:'Hojas',                   valor:hojLbl + ' · ' + gLbl,     precio:pH},
+    {label:'Diseño de hojas',         valor:phDisp,                     precio:pP},
+  ];
+  rows.forEach(r => {
+    lista.insertAdjacentHTML('beforeend',
+      `<div class="resumen-item">
+        <div class="ri-left"><span class="label">${r.label}</span><span class="valor">${r.valor}</span></div>
+        <span class="precio-item">${fmt(r.precio)}</span>
+      </div>`);
+  });
+
+  const accs = getAccSel();
+  if (accs.length > 0) {
+    lista.insertAdjacentHTML('beforeend', '<div class="resumen-divider"></div>');
+    accs.forEach(a => {
+      const color = document.getElementById('acc-'+a.id)?.querySelector('select')?.value || '';
+      const p = P[a.pk] || 0; total += p;
+      lista.insertAdjacentHTML('beforeend',
+        `<div class="resumen-item">
+          <div class="ri-left"><span class="label">+ ${a.label}</span><span class="valor">${color}</span></div>
+          <span class="precio-item">${fmt(p)}</span>
+        </div>`);
+    });
+  }
+
+  lista.insertAdjacentHTML('beforeend',
+    `<div class="resumen-total-row">
+      <span class="total-label">Total estimado</span>
+      <span class="total-precio">${fmt(total)}</span>
+    </div>`);
+  document.getElementById('total-badge').textContent = fmt(total);
+
+  // Progress
+  let done = 0;
+  if (document.getElementById('mat').value) done++;
+  done += 3;
+  if (accs.length > 0) done++;
+  document.getElementById('progressBar').style.width = Math.round((done/5)*100) + '%';
+
+  // Card done states
+  const map = {'header-material':!!document.getElementById('mat').value,'header-tamanio':true,'header-hojas':true,'header-pers-hojas':true,'header-accesorios':accs.length>0};
+  Object.entries(map).forEach(([id,v]) => document.getElementById(id)?.classList.toggle('done', v));
+}
+
+// ── COPIAR ────────────────────────────────────────────────────
+function copiarResumen() {
+  const mat  = document.getElementById('mat').value||'—';
+  const sub1 = document.getElementById('mat-sub1').value||'';
+  const sub2 = document.getElementById('mat-sub2').value||'';
+  const tam  = document.getElementById('tamanio').value;
+  const tamL = tam==='a5'?'A5 — 210×148mm':'Medio-Medio Oficio — 165×108mm';
+  const gL   = tam==='a5'?'75 gr/m²':'70 gr/m²';
+  const hS   = document.getElementById('hojas');
+  const phS  = document.getElementById('pers-hojas');
+  const accs = getAccSel();
+  let txt = '✦ PEDIDO — ANOTA LIBRETAS ✦\n\n';
+  txt += '📚 Material: ' + [mat,sub1,sub2].filter(Boolean).join(' › ') + '\n';
+  txt += '📐 Tamaño: ' + tamL + '\n';
+  txt += '📄 Hojas: ' + (hS.options[hS.selectedIndex]?.text||'') + ' · ' + gL + '\n';
+  txt += '🎨 Diseño: ' + (phS.options[phS.selectedIndex]?.text||'') + '\n';
+  if (accs.length > 0) {
+    txt += '\n🎀 Accesorios:\n';
+    accs.forEach(a => {
+      const c = document.getElementById('acc-'+a.id)?.querySelector('select')?.value||'';
+      txt += '  • ' + a.label + (c ? ' — ' + c : '') + '\n';
+    });
+  }
+  txt += '\n💰 Total estimado: ' + document.getElementById('total-badge').textContent;
+  txt += '\n\n⚠️ Precio orientativo. Confirmá el total con Anota Libretas.';
+  navigator.clipboard.writeText(txt).then(() => {
+    const b = event.target.closest('button'), o = b.textContent;
+    b.textContent = '✓ ¡Copiado!';
+    setTimeout(() => b.textContent = o, 2000);
+  }).catch(() => prompt('Copiá este texto:', txt));
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+onMatChange();
+onPersHojasChange();
+updateResumen();
+</script>
+</body>
+</html>
