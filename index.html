@@ -29,7 +29,7 @@
   header::before { content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px; background:var(--red-light); border-radius:50%; opacity:0.4; }
   header::after  { content:''; position:absolute; bottom:-40px; left:40px; width:160px; height:160px; background:var(--peach); border-radius:50%; opacity:0.15; }
   .header-inner  { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:36px 22px 30px; display:flex; align-items:flex-end; gap:18px; }
-  .logo-mark     { width:52px; height:52px; background:var(--peach); border-radius:14px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:24px; color:var(--red); font-weight:700; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+  .logo-mark { width:52px; height:52px; border-radius:14px; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.2); overflow:hidden; }
   .header-text h1{ font-family:'Playfair Display',serif; font-size:clamp(20px,5vw,30px); color:var(--white); letter-spacing:-0.5px; line-height:1.1; }
   .header-text p { color:rgba(255,255,255,0.72); font-size:12px; margin-top:4px; font-weight:300; }
   .progress-bar-wrap { background:var(--red-light); height:4px; }
@@ -150,7 +150,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo-mark">A</div>
+    <div class="logo-mark"><img src="assets/vectorink-download.png" style="width:100%;height:100%;object-fit:cover;"></div>
     <div class="header-text">
       <h1>Anota Libretas</h1>
       <p>Personalizá tu libreta o agenda ✦ cada detalle, a tu gusto</p>
