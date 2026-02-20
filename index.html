@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Anota Libretas — Personalizá tu libreta</title>
-<link rel="icon" type="image/png" href="assets/vectorink-download.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -29,7 +28,7 @@
   header::before { content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px; background:var(--red-light); border-radius:50%; opacity:0.4; }
   header::after  { content:''; position:absolute; bottom:-40px; left:40px; width:160px; height:160px; background:var(--peach); border-radius:50%; opacity:0.15; }
   .header-inner  { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:36px 22px 30px; display:flex; align-items:flex-end; gap:18px; }
-  .logo-mark { width:52px; height:52px; border-radius:14px; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.2); overflow:hidden; }
+  .logo-mark     { width:52px; height:52px; background:var(--peach); border-radius:14px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:24px; color:var(--red); font-weight:700; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
   .header-text h1{ font-family:'Playfair Display',serif; font-size:clamp(20px,5vw,30px); color:var(--white); letter-spacing:-0.5px; line-height:1.1; }
   .header-text p { color:rgba(255,255,255,0.72); font-size:12px; margin-top:4px; font-weight:300; }
   .progress-bar-wrap { background:var(--red-light); height:4px; }
@@ -39,7 +38,7 @@
 
   /* CARDS */
   .card { background:var(--white); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); animation:fadeSlideIn 0.4s ease both; }
-  .card:nth-child(1){animation-delay:.05s} .card:nth-child(2){animation-delay:.10s} .card:nth-child(3){animation-delay:.15s} .card:nth-child(4){animation-delay:.20s} .card:nth-child(5){animation-delay:.25s}
+  .card:nth-child(1){animation-delay:.05s} .card:nth-child(2){animation-delay:.10s} .card:nth-child(3){animation-delay:.15s} .card:nth-child(4){animation-delay:.20s} .card:nth-child(5){animation-delay:.25s} .card:nth-child(6){animation-delay:.30s} .card:nth-child(7){animation-delay:.35s}
   .card-header { background:var(--blue); padding:13px 18px; display:flex; align-items:center; gap:11px; }
   .card-header.done { background:var(--red); }
   .step-badge { width:26px; height:26px; background:rgba(255,255,255,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:var(--white); flex-shrink:0; }
@@ -54,11 +53,10 @@
   .select-group label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.7px; color:var(--blue); }
   .select-group label .lvl { color:var(--peach-dark); margin-right:3px; }
 
-  /* CLAVE: select nunca disabled en iOS — usamos pointer-events y opacity visual */
   select {
     width:100%; padding:12px 38px 12px 14px;
     border:1.5px solid var(--border); border-radius:10px;
-    font-family:'DM Sans',sans-serif; font-size:16px; /* 16px evita zoom en iOS */
+    font-family:'DM Sans',sans-serif; font-size:16px;
     color:var(--carbon); background:var(--cream);
     -webkit-appearance:none; appearance:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235ab8bf' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -66,7 +64,6 @@
     cursor:pointer; transition:border-color 0.2s; touch-action:manipulation;
   }
   select:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(90,184,191,0.15); }
-  /* Estado inactivo: visual pero SIN disabled (iOS no dispara change en selects disabled) */
   select.inactive { opacity:0.4; pointer-events:none; background-color:#f0f0f0; }
   select.active   { border-color:var(--blue); background-color:rgba(90,184,191,0.05); }
 
@@ -76,6 +73,9 @@
   .ref-link { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--red); text-decoration:none; font-weight:500; padding:7px 13px; background:rgba(163,45,41,0.07); border-radius:20px; align-self:flex-start; touch-action:manipulation; }
   .ref-link::before { content:'🔗'; font-size:11px; }
 
+  /* INFO BOX */
+  .info-box { background:rgba(253,220,166,0.25); border:1.5px solid var(--peach-dark); border-radius:10px; padding:11px 14px; font-size:12px; color:var(--carbon-soft); line-height:1.5; }
+
   /* CANVA BANNER */
   .canva-banner { background:linear-gradient(135deg,rgba(90,184,191,0.1),rgba(253,220,166,0.2)); border:1.5px dashed var(--blue); border-radius:12px; padding:14px 15px; display:none; align-items:flex-start; gap:10px; }
   .canva-banner.visible { display:flex; }
@@ -83,7 +83,7 @@
   .canva-banner p { font-size:13px; line-height:1.5; }
   .canva-banner a { color:var(--red); font-weight:600; }
 
-  /* ACCESORIOS — rediseño sin conflicto de eventos */
+  /* ACCESORIOS */
   .accesorio-item { border:1.5px solid var(--border); border-radius:12px; overflow:hidden; transition:border-color 0.2s, background 0.2s; margin-bottom:2px; }
   .accesorio-item.selected { border-color:var(--blue); background:rgba(90,184,191,0.04); }
 
@@ -96,7 +96,7 @@
     cursor:pointer;
     touch-action:manipulation;
     -webkit-user-select:none; user-select:none;
-    min-height:52px; /* área táctil generosa */
+    min-height:52px;
   }
   .acc-header:active { background:rgba(90,184,191,0.08); }
 
@@ -106,11 +106,12 @@
   .accesorio-item.selected .toggle-switch::after { left:19px; }
 
   .accesorio-name { font-size:14px; font-weight:500; line-height:1.3; pointer-events:none; }
+  .acc-precio-tag { font-size:11px; color:var(--red); font-weight:700; pointer-events:none; flex-shrink:0; }
 
   .acc-muestra {
     font-size:11px; color:var(--red); font-weight:600;
     padding:5px 10px; background:rgba(163,45,41,0.08); border-radius:16px;
-    white-space:nowrap; pointer-events:none; /* el click lo maneja acc-header */
+    white-space:nowrap; pointer-events:none;
     flex-shrink:0;
   }
 
@@ -150,7 +151,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo-mark"><img src="assets/vectorink-download.png" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="logo-mark">A</div>
     <div class="header-text">
       <h1>Anota Libretas</h1>
       <p>Personalizá tu libreta o agenda ✦ cada detalle, a tu gusto</p>
@@ -161,10 +162,52 @@
 
 <main>
 
-  <!-- 1. MATERIAL -->
+  <!-- 1. TAMAÑO -->
+  <div class="card">
+    <div class="card-header done" id="header-tamanio">
+      <div class="step-badge">1</div><h2>Tamaño de la libreta</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <div class="select-col">
+        <div class="select-group">
+          <label><span class="lvl">◆</span>Tamaño</label>
+          <select id="tamanio" onchange="onTamanioChange()">
+            <option value="mm" selected>Medio-Medio Oficio — 165×108 mm ★</option>
+            <option value="a5">Medio Oficio / A5 — 210×148 mm</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label><span class="lvl">◆</span>Gramaje incluido</label>
+          <div class="gramaje-display" id="gramaje-display">75 gr/m² (único por ahora)</div>
+        </div>
+      </div>
+      <a href="#" class="ref-link" onclick="return false">Ver referencia de tamaños</a>
+    </div>
+  </div>
+
+  <!-- 2. CANTIDAD DE HOJAS -->
+  <div class="card">
+    <div class="card-header done" id="header-hojas">
+      <div class="step-badge">2</div><h2>Cantidad de hojas</h2><div class="check">✓</div>
+    </div>
+    <div class="card-body">
+      <div class="select-group">
+        <label><span class="lvl">◆</span>Cantidad</label>
+        <select id="hojas" onchange="updateResumen()">
+          <option value="104">104 hojas — 208 páginas</option>
+          <option value="80" selected>80 hojas — 160 páginas ★</option>
+          <option value="64">64 hojas — 128 páginas</option>
+        </select>
+      </div>
+      <p style="font-size:12px;color:#999;font-style:italic;">★ = opción predeterminada</p>
+      <a href="#" class="ref-link" onclick="return false">Ver referencia de espesores</a>
+    </div>
+  </div>
+
+  <!-- 3. MATERIAL TAPA -->
   <div class="card">
     <div class="card-header" id="header-material">
-      <div class="step-badge">1</div><h2>Material de tapa</h2><div class="check">✓</div>
+      <div class="step-badge">3</div><h2>Material de tapa</h2><div class="check">✓</div>
     </div>
     <div class="card-body">
       <div class="select-col">
@@ -172,11 +215,10 @@
           <label><span class="lvl">◆</span>Material</label>
           <select id="mat" onchange="onMatChange()">
             <option value="">— Elegí —</option>
-            <option value="Crea cruda" selected>Crea cruda</option>
-            <option value="Lino">Lino</option>
-            <option value="Lino velvet">Lino velvet</option>
+            <option value="Crea cruda">Crea cruda</option>
+            <option value="Lino" selected>Lino ★</option>
             <option value="Ecocuero">Ecocuero</option>
-            <option value="Papel impreso">Papel impreso</option>
+            <option value="Papel couché">Papel couché</option>
           </select>
         </div>
         <div class="select-group">
@@ -190,57 +232,57 @@
           <select id="mat-sub2" onchange="updateResumen()" class="inactive">
             <option value="">— Primero elegí sub-opción —</option>
           </select>
-          <p class="empty-hint" id="hint-mat-sub2">Esta opción no tiene variantes de color.</p>
+          <p class="empty-hint" id="hint-mat-sub2">Esta opción no tiene variantes adicionales.</p>
         </div>
+      </div>
+      <div class="info-box" id="papel-info" style="display:none">
+        📎 Si la tapa lleva imagen o diseño personalizado, envialo luego en el chat de la tienda (PNG o archivo de Canva). Resolución recomendada: mínimo 300 dpi.
       </div>
       <a href="#" class="ref-link" onclick="return false">Ver muestras de materiales</a>
     </div>
   </div>
 
-  <!-- 2. TAMAÑO -->
+  <!-- 4. ENDPAGES -->
   <div class="card">
-    <div class="card-header" id="header-tamanio">
-      <div class="step-badge">2</div><h2>Tamaño de la libreta</h2><div class="check">✓</div>
+    <div class="card-header done" id="header-endpages">
+      <div class="step-badge">4</div><h2>Endpages (hojas de guarda)</h2><div class="check">✓</div>
     </div>
     <div class="card-body">
       <div class="select-col">
         <div class="select-group">
-          <label><span class="lvl">◆</span>Tamaño</label>
-          <select id="tamanio" onchange="onTamanioChange()">
-            <option value="mm" selected>Medio-Medio Oficio — 165×108mm</option>
-            <option value="a5">A5 — 210×148mm</option>
+          <label><span class="lvl">◆</span>Tipo</label>
+          <select id="endpage-tipo" onchange="onEndpageTipoChange()">
+            <option value="blancas" selected>Blancas ★</option>
+            <option value="color">Color</option>
+          </select>
+        </div>
+        <div class="select-group" id="group-endpage-color" style="display:none">
+          <label><span class="lvl">◦</span>Color</label>
+          <select id="endpage-color" onchange="updateResumen()">
+            <option value="Rojo" selected>Rojo ★</option>
+            <option value="Celeste">Celeste</option>
+            <option value="Otro (consultar)">Otro (consultar)</option>
           </select>
         </div>
         <div class="select-group">
-          <label><span class="lvl">◆</span>Gramaje incluido</label>
-          <div class="gramaje-display" id="gramaje-display">70 gr/m² (incluido en el precio)</div>
+          <label><span class="lvl">▸</span>Impresión</label>
+          <select id="endpage-imp" onchange="updateResumen()">
+            <option value="sin" selected>Sin impresión ★</option>
+            <option value="con">Con impresión</option>
+          </select>
         </div>
       </div>
-      <a href="#" class="ref-link" onclick="return false">Ver referencia de tamaños</a>
-    </div>
-  </div>
-
-  <!-- 3. HOJAS -->
-  <div class="card">
-    <div class="card-header" id="header-hojas">
-      <div class="step-badge">3</div><h2>Cantidad de hojas</h2><div class="check">✓</div>
-    </div>
-    <div class="card-body">
-      <div class="select-group">
-        <label><span class="lvl">◆</span>Cantidad</label>
-        <select id="hojas" onchange="updateResumen()">
-          <option value="105">105 hojas — 208 páginas</option>
-          <option value="80" selected>80 hojas — 160 páginas</option>
-          <option value="64">64 hojas — 128 páginas</option>
-        </select>
+      <div class="info-box" id="endpage-imp-info" style="display:none">
+        📎 Si elegís endpages con impresión, enviá el diseño luego en el chat de la tienda.
       </div>
+      <a href="#" class="ref-link" onclick="return false">Ver ejemplos de endpages</a>
     </div>
   </div>
 
-  <!-- 4. DISEÑO HOJAS -->
+  <!-- 5. DISEÑO HOJAS -->
   <div class="card">
-    <div class="card-header" id="header-pers-hojas">
-      <div class="step-badge">4</div><h2>Diseño de las hojas</h2><div class="check">✓</div>
+    <div class="card-header done" id="header-pers-hojas">
+      <div class="step-badge">5</div><h2>Diseño de las hojas</h2><div class="check">✓</div>
     </div>
     <div class="card-body">
       <div class="select-col">
@@ -249,7 +291,7 @@
           <select id="pers-hojas" onchange="onPersHojasChange()">
             <option value="blancas">Hojas blancas</option>
             <option value="base">Usar solo una base</option>
-            <option value="patron" selected>Personalizar patrón (hasta 6)</option>
+            <option value="patron" selected>Personalizar patrón (hasta 5) ★</option>
             <option value="todas">Personalizar todas las hojas</option>
           </select>
         </div>
@@ -257,50 +299,62 @@
           <label><span class="lvl">▸</span>Elegí la base</label>
           <select id="base-selector" onchange="updateResumen()">
             <option value="Base 1 - Agenda 2026">Base 1 — Agenda 2026</option>
-            <option value="Base 2 - Cuadriculado">Base 2 — Cuadriculado</option>
-            <option value="Otra base">Otra base (consultar)</option>
+            <option value="Base 2 - Franjas 3mm" selected>Base 2 — Franjas 3 mm ★</option>
+            <option value="Otra base (consultar)">Otra base (consultar)</option>
           </select>
         </div>
       </div>
-      <div class="canva-banner visible" id="canva-banner">
-        <div class="icon">🎨</div>
-        <p>Para personalizar las hojas, descargá la <a href="#" onclick="return false">base de Canva</a> y editala a tu gusto. Después enviala junto con tu pedido.</p>
+
+      <!-- TINTA -->
+      <div id="group-tinta" style="display:none">
+        <div style="height:1px;background:var(--border);margin:4px 0 8px"></div>
+        <div class="select-col">
+          <div class="select-group">
+            <label><span class="lvl">▸</span>Tipo de impresión (tinta)</label>
+            <select id="tinta-tipo" onchange="updateResumen()">
+              <option value="color" selected>A color ★</option>
+              <option value="mono">Monocromo (más económico)</option>
+            </select>
+          </div>
+        </div>
+        <div class="info-box" style="margin-top:8px;font-size:11.5px;">
+          💡 El costo de tinta depende de la cantidad de hojas y se suma al diseño de las hojas.
+        </div>
       </div>
+
+      <div class="canva-banner" id="canva-banner">
+        <div class="icon">🎨</div>
+        <p>Para personalizar las hojas, descargá la <a href="#" onclick="return false">base de Canva</a> y editala a tu gusto. Después enviala junto con tu pedido en el chat de la tienda.</p>
+      </div>
+      <a href="#" class="ref-link" onclick="return false">Ver ejemplos de diseños</a>
     </div>
   </div>
 
-  <!-- 5. ACCESORIOS -->
+  <!-- 6. ACCESORIOS -->
   <div class="card">
     <div class="card-header" id="header-accesorios">
-      <div class="step-badge">5</div><h2>Accesorios opcionales</h2><div class="check">✓</div>
+      <div class="step-badge">6</div><h2>Accesorios opcionales</h2><div class="check">✓</div>
     </div>
     <div class="card-body">
       <p style="font-size:13px;color:#888;">Tocá para activar los accesorios que querés sumar.</p>
 
-      <div class="accesorio-item" id="acc-esq3">
-        <div class="acc-header" onclick="toggleAcc('esq3')">
+      <div class="accesorio-item" id="acc-esq">
+        <div class="acc-header" onclick="toggleAcc('esq')">
           <div class="toggle-switch"></div>
-          <span class="accesorio-name">Esquineras 3×3 cm</span>
+          <span class="accesorio-name">Esquineras metálicas (x4)</span>
           <span class="acc-muestra">🔗 Ver muestra</span>
         </div>
         <div class="accesorio-detail">
           <div class="select-group">
-            <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Plateado</option><option>Dorado</option><option>Otro (consultar)</option></select>
+            <label><span class="lvl">▸</span>Tamaño</label>
+            <select id="esq-tam" onchange="updateResumen()">
+              <option value="3x3">Grandes 3×3 cm ★</option>
+              <option value="1.5x1.5">Pequeñas 1.5×1.5 cm</option>
+            </select>
           </div>
-        </div>
-      </div>
-
-      <div class="accesorio-item" id="acc-esq15">
-        <div class="acc-header" onclick="toggleAcc('esq15')">
-          <div class="toggle-switch"></div>
-          <span class="accesorio-name">Esquineras 1.5×1.5 cm</span>
-          <span class="acc-muestra">🔗 Ver muestra</span>
-        </div>
-        <div class="accesorio-detail">
-          <div class="select-group">
+          <div class="select-group" style="margin-top:8px">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Plateado</option><option>Dorado</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Plateado ★</option><option>Dorado</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -314,7 +368,7 @@
         <div class="accesorio-detail">
           <div class="select-group">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Negro ★</option><option>Celeste</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -328,7 +382,7 @@
         <div class="accesorio-detail">
           <div class="select-group">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Negro ★</option><option>Celeste</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -336,13 +390,13 @@
       <div class="accesorio-item" id="acc-porta-cierre">
         <div class="acc-header" onclick="toggleAcc('porta-cierre')">
           <div class="toggle-switch"></div>
-          <span class="accesorio-name">Portalápiz en cierre elástico</span>
+          <span class="accesorio-name">Portalápiz 3D integrado en cierre elástico</span>
           <span class="acc-muestra">🔗 Ver muestra</span>
         </div>
         <div class="accesorio-detail">
           <div class="select-group">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Negro ★</option><option>Celeste</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -356,35 +410,29 @@
         <div class="accesorio-detail">
           <div class="select-group">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Rojo</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Beige ★</option><option>Celeste</option><option>Negro</option><option>Rojo</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
 
-      <div class="accesorio-item" id="acc-hk">
-        <div class="acc-header" onclick="toggleAcc('hk')">
+      <div class="accesorio-item" id="acc-dije">
+        <div class="acc-header" onclick="toggleAcc('dije')">
           <div class="toggle-switch"></div>
-          <span class="accesorio-name">Dije Hello Kitty (impreso en 3D)</span>
+          <span class="accesorio-name">Dije 3D para elástico (impreso en 3D)</span>
           <span class="acc-muestra">🔗 Ver muestra</span>
         </div>
         <div class="accesorio-detail">
           <div class="select-group">
-            <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Rosado</option><option>Blanco</option><option>Otro (consultar)</option></select>
+            <label><span class="lvl">▸</span>Diseño</label>
+            <select id="dije-tipo" onchange="updateResumen()">
+              <option value="Hello Kitty">Hello Kitty</option>
+              <option value="Texto 2026" selected>Texto 2026 ★</option>
+              <option value="Otro (consultar)">Otro (consultar)</option>
+            </select>
           </div>
-        </div>
-      </div>
-
-      <div class="accesorio-item" id="acc-texto">
-        <div class="acc-header" onclick="toggleAcc('texto')">
-          <div class="toggle-switch"></div>
-          <span class="accesorio-name">Dije "Texto 2026" (impreso en 3D)</span>
-          <span class="acc-muestra">🔗 Ver muestra</span>
-        </div>
-        <div class="accesorio-detail">
-          <div class="select-group">
+          <div class="select-group" style="margin-top:8px">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Dorado</option><option>Plateado</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Dorado ★</option><option>Plateado</option><option>Rosado</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -398,7 +446,7 @@
         <div class="accesorio-detail">
           <div class="select-group">
             <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Negro</option><option>Celeste</option><option>Blanco</option><option>Otro (consultar)</option></select>
+            <select onchange="updateResumen()"><option>Celeste ★</option><option>Negro</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -426,42 +474,74 @@
 
 <script>
 // ── PRECIOS (CLP) ─────────────────────────────────────────────
-const P = {
-  base:2300, crea_sinte:500, crea_veg:900, lino:800, lino_velvet:1000, eco:1000,
-  papel_solido:800, papel_imagen:700, tam_mm:0, tam_a5:200,
-  hoj_mm_64:900, hoj_mm_80:1000, hoj_mm_105:1500,
-  hoj_a5_64:1800, hoj_a5_80:2000, hoj_a5_105:2700,
-  ph_blancas:0, ph_base:500, ph_patron:900, ph_todas:1500,
-  esq3:1500, esq15:1000, cierre:800, portalapiz:500, porta_cierre:700,
-  cinta:500, dije:700, llavero:400,
+// Medio-Medio Oficio
+const P_MM = {
+  base:2500,
+  crea:400, crea_veg:80,
+  lino:700, lino_pat:800, lino_velvet:1000,
+  eco:1000,
+  papel:500, papel_imp_completa:80, papel_imp_simple:20,
+  hoj_64:1100, hoj_80:1300, hoj_104:1500,
+  ep_blancas:100, ep_color:150, ep_imp:50,
+  ph_blancas:0, ph_base:100, ph_patron:200, ph_todas:500,
+  esq3:500, esq15:400, cierre:300, portalapiz:200,
+  porta_cierre:200, cinta:150, dije:300,
+  tinta_color_104:1200, tinta_color_80:900, tinta_color_64:700,
+  tinta_mono_104:550,  tinta_mono_80:400,  tinta_mono_64:350,
+};
+// A5
+const P_A5 = {
+  base:2500,
+  crea:600, crea_veg:100,
+  lino:1000, lino_pat:1200, lino_velvet:1500,
+  eco:1500,
+  papel:750, papel_imp_completa:150, papel_imp_simple:50,
+  hoj_64:1300, hoj_80:1800, hoj_104:2300,
+  ep_blancas:300, ep_color:400, ep_imp:100,
+  ph_blancas:0, ph_base:200, ph_patron:400, ph_todas:600,
+  esq3:500, esq15:400, cierre:300, portalapiz:200,
+  porta_cierre:200, cinta:150, dije:300,
+  tinta_color_104:2300, tinta_color_80:1800, tinta_color_64:1400,
+  tinta_mono_104:450,  tinta_mono_80:350,  tinta_mono_64:300,
 };
 
-// ── DATOS CASCADA ─────────────────────────────────────────────
+function P() { return document.getElementById('tamanio').value === 'a5' ? P_A5 : P_MM; }
+
+// ── DATOS CASCADA MATERIAL ─────────────────────────────────────
 const matSub1 = {
-  'Crea cruda':    ['Sin teñir','Color vegetal'],
-  'Lino':          ['Color sólido','Patrones','Lino grueso sólido'],
-  'Lino velvet':   ['Color sólido'],
-  'Ecocuero':      ['Café claro','Negro','Etc... (consultar)'],
-  'Papel impreso': ['Color sólido','Imagen','Color tela del lomo'],
+  'Crea cruda':   ['Sin teñir ★','Color vegetal'],
+  'Lino':         ['Color sólido ★','Patrones','Lino velvet sólido'],
+  'Ecocuero':     ['Café claro ★','Negro','Otro (consultar)'],
+  'Papel couché': ['Blanco sin impresión','Impresión simple','Impresión completa ★'],
 };
 const matSub2 = {
-  'Crea cruda|Sin teñir':              null,
-  'Crea cruda|Color vegetal':          ['Naranja','Rojo','Etc... (consultar)'],
-  'Lino|Color sólido':                 ['Beige','Etc... (consultar)'],
-  'Lino|Patrones':                     ['Franjas rojas y blancas','Etc... (consultar)'],
-  'Lino|Lino grueso sólido':           ['Blanco','Etc... (consultar)'],
-  'Lino velvet|Color sólido':          ['Etc... (consultar)'],
-  'Ecocuero|Café claro':               null,
-  'Ecocuero|Negro':                    null,
-  'Ecocuero|Etc... (consultar)':       null,
-  'Papel impreso|Color sólido':        null,
-  'Papel impreso|Imagen':              null,
-  'Papel impreso|Color tela del lomo': ['Celeste','Blanco','Etc... (consultar)'],
+  'Crea cruda|Sin teñir ★':                     null,
+  'Crea cruda|Color vegetal':                   ['Naranja','Rojo ★','Otro (consultar)'],
+  'Lino|Color sólido ★':                        ['Beige ★','Otro (consultar)'],
+  'Lino|Patrones':                              ['Franjas rojas y blancas ★','Otro (consultar)'],
+  'Lino|Lino velvet sólido':                    ['Blanco ★','Otro (consultar)'],
+  'Ecocuero|Café claro ★':                      null,
+  'Ecocuero|Negro':                             null,
+  'Ecocuero|Otro (consultar)':                  null,
+  'Papel couché|Blanco sin impresión':          ['Color lomo: Celeste','Color lomo: Blanco ★','Otro (consultar)'],
+  'Papel couché|Impresión simple':              ['Color lomo: Celeste','Color lomo: Blanco ★','Otro (consultar)'],
+  'Papel couché|Impresión completa ★':          ['Color lomo: Celeste','Color lomo: Blanco ★','Otro (consultar)'],
 };
-const matDef  = {'Crea cruda':'Sin teñir','Lino':'Color sólido','Lino velvet':'Color sólido','Ecocuero':'Café claro','Papel impreso':'Imagen'};
-const sub2Def = {'Crea cruda|Color vegetal':'Rojo','Lino|Color sólido':'Beige','Lino|Patrones':'Franjas rojas y blancas','Lino|Lino grueso sólido':'Blanco','Papel impreso|Color tela del lomo':'Blanco'};
+const matDef  = {
+  'Crea cruda':'Sin teñir ★','Lino':'Color sólido ★',
+  'Ecocuero':'Café claro ★','Papel couché':'Impresión completa ★'
+};
+const sub2Def = {
+  'Crea cruda|Color vegetal':'Rojo ★',
+  'Lino|Color sólido ★':'Beige ★',
+  'Lino|Patrones':'Franjas rojas y blancas ★',
+  'Lino|Lino velvet sólido':'Blanco ★',
+  'Papel couché|Blanco sin impresión':'Color lomo: Blanco ★',
+  'Papel couché|Impresión simple':'Color lomo: Blanco ★',
+  'Papel couché|Impresión completa ★':'Color lomo: Blanco ★',
+};
 
-// ── HELPERS SELECTOR ──────────────────────────────────────────
+// ── HELPERS ────────────────────────────────────────────────────
 function setActive(sel, active) {
   sel.classList.toggle('inactive', !active);
   sel.classList.toggle('active', active);
@@ -475,20 +555,21 @@ function poblarSelect(sel, opciones, defVal) {
   if (defVal && sel.querySelector(`option[value="${defVal}"]`)) sel.value = defVal;
 }
 
-// ── CASCADA MATERIAL ──────────────────────────────────────────
+// ── CASCADA MATERIAL ───────────────────────────────────────────
 function onMatChange() {
   const mat  = document.getElementById('mat').value;
   const s1   = document.getElementById('mat-sub1');
   const s2   = document.getElementById('mat-sub2');
   const hint = document.getElementById('hint-mat-sub2');
+  const info = document.getElementById('papel-info');
 
   hint.style.display = 'none';
   s1.innerHTML = '<option value="">— Elegí sub-opción —</option>';
   s2.innerHTML = '<option value="">— Elegí variante —</option>';
   setActive(s1, false); setActive(s2, false);
+  info.style.display = mat === 'Papel couché' ? 'block' : 'none';
 
   if (!mat) { updateResumen(); return; }
-
   poblarSelect(s1, matSub1[mat] || [], matDef[mat]);
   setActive(s1, true);
   onMatSub1Change();
@@ -508,121 +589,200 @@ function onMatSub1Change() {
 
   const key  = mat + '|' + sub1;
   const opts = matSub2[key];
-
-  if (!opts) {
-    hint.style.display = 'block';
-    updateResumen(); return;
-  }
+  if (!opts) { hint.style.display = 'block'; updateResumen(); return; }
   poblarSelect(s2, opts, sub2Def[key]);
   setActive(s2, true);
   updateResumen();
 }
 
-// ── TAMAÑO ────────────────────────────────────────────────────
+// ── TAMAÑO ─────────────────────────────────────────────────────
 function onTamanioChange() {
+  // Ajustar opciones de hojas según tamaño
   const t = document.getElementById('tamanio').value;
-  document.getElementById('gramaje-display').textContent =
-    t === 'a5' ? '75 gr/m² (incluido en el precio)' : '70 gr/m² (incluido en el precio)';
+  const hSel = document.getElementById('hojas');
+  const curVal = hSel.value;
+  hSel.innerHTML = '';
+  const opts104 = t === 'a5'
+    ? [{v:'104',l:'104 hojas — 208 páginas'},{v:'80',l:'80 hojas — 160 páginas ★'},{v:'64',l:'64 hojas — 128 páginas'}]
+    : [{v:'104',l:'104 hojas — 208 páginas'},{v:'80',l:'80 hojas — 160 páginas ★'},{v:'64',l:'64 hojas — 128 páginas'}];
+  opts104.forEach(o => {
+    const op = document.createElement('option');
+    op.value = o.v; op.textContent = o.l; hSel.appendChild(op);
+  });
+  hSel.value = curVal || '80';
   updateResumen();
 }
 
-// ── DISEÑO HOJAS ──────────────────────────────────────────────
+// ── ENDPAGES ───────────────────────────────────────────────────
+function onEndpageTipoChange() {
+  const v = document.getElementById('endpage-tipo').value;
+  document.getElementById('group-endpage-color').style.display = v === 'color' ? 'block' : 'none';
+  updateResumen();
+}
+
+// ── DISEÑO HOJAS ───────────────────────────────────────────────
 function onPersHojasChange() {
   const v = document.getElementById('pers-hojas').value;
   document.getElementById('group-base-selector').style.display = v === 'base' ? 'block' : 'none';
   document.getElementById('canva-banner').classList.toggle('visible', v === 'patron' || v === 'todas');
+  document.getElementById('group-tinta').style.display = v !== 'blancas' ? 'block' : 'none';
   updateResumen();
 }
 
-// ── ACCESORIOS ────────────────────────────────────────────────
+// ── ACCESORIOS ─────────────────────────────────────────────────
 function toggleAcc(id) {
   document.getElementById('acc-' + id).classList.toggle('selected');
   updateResumen();
 }
 
 const ACC_LIST = [
-  {id:'esq3',        label:'Esquineras 3×3 cm',             pk:'esq3'},
-  {id:'esq15',       label:'Esquineras 1.5×1.5 cm',         pk:'esq15'},
-  {id:'cierre',      label:'Cierre elástico',                pk:'cierre'},
-  {id:'portalapiz',  label:'Elástico portalápiz',            pk:'portalapiz'},
-  {id:'porta-cierre',label:'Portalápiz en cierre elástico',  pk:'porta_cierre'},
-  {id:'cinta',       label:'Cinta marcapáginas',             pk:'cinta'},
-  {id:'hk',          label:'Dije Hello Kitty',               pk:'dije'},
-  {id:'texto',       label:'Dije Texto 2026',                pk:'dije'},
-  {id:'llavero',     label:'Elástico para colgar llaveros',  pk:'llavero'},
+  {id:'esq',         label:'Esquineras metálicas (x4)',           pk:'esq_pk'},
+  {id:'cierre',      label:'Cierre elástico',                     pk:'cierre'},
+  {id:'portalapiz',  label:'Elástico portalápiz',                 pk:'portalapiz'},
+  {id:'porta-cierre',label:'Portalápiz 3D en cierre',             pk:'porta_cierre'},
+  {id:'cinta',       label:'Cinta marcapáginas',                  pk:'cinta'},
+  {id:'dije',        label:'Dije 3D para elástico',               pk:'dije'},
+  {id:'llavero',     label:'Elástico para colgar llaveros',       pk:'cierre'}, // mismo precio que cierre (consultar, no en tabla)
 ];
+
 function getAccSel() {
   return ACC_LIST.filter(a => document.getElementById('acc-'+a.id)?.classList.contains('selected'));
 }
 
-// ── PRECIOS ───────────────────────────────────────────────────
+// ── CÁLCULO PRECIOS ────────────────────────────────────────────
 function getPMat() {
-  const mat = document.getElementById('mat').value;
-  const s1  = document.getElementById('mat-sub1').value;
+  const mat  = document.getElementById('mat').value;
+  const sub1 = document.getElementById('mat-sub1').value;
+  const p    = P();
   if (!mat) return 0;
-  if (mat === 'Crea cruda')    return s1 === 'Sin teñir' ? P.crea_sinte : P.crea_veg;
-  if (mat === 'Lino')          return P.lino;
-  if (mat === 'Lino velvet')   return P.lino_velvet;
-  if (mat === 'Ecocuero')      return P.eco;
-  if (mat === 'Papel impreso') return s1 === 'Color sólido' ? P.papel_solido : P.papel_imagen;
+  if (mat === 'Crea cruda') {
+    let base = p.crea;
+    if (sub1 === 'Color vegetal') base += p.crea_veg;
+    return base;
+  }
+  if (mat === 'Lino') {
+    if (sub1 === 'Patrones') return p.lino_pat;
+    if (sub1 === 'Lino velvet sólido') return p.lino_velvet;
+    return p.lino;
+  }
+  if (mat === 'Ecocuero') return p.eco;
+  if (mat === 'Papel couché') {
+    let base = p.papel;
+    if (sub1 === 'Impresión completa ★') base += p.papel_imp_completa;
+    if (sub1 === 'Impresión simple')    base += p.papel_imp_simple;
+    return base;
+  }
   return 0;
 }
-function getPTam()   { return document.getElementById('tamanio').value === 'a5' ? P.tam_a5 : P.tam_mm; }
 function getPHojas() {
-  const t = document.getElementById('tamanio').value;
   const h = document.getElementById('hojas').value;
-  return P['hoj_' + (t === 'a5' ? 'a5' : 'mm') + '_' + h] || 0;
+  return P()['hoj_' + h] || 0;
 }
-function getPPerso() { return P['ph_' + document.getElementById('pers-hojas').value] || 0; }
-function fmt(n) { return n ? '$ ' + n.toLocaleString('es-CL') : '$ —'; }
+function getPEndpages() {
+  const tipo = document.getElementById('endpage-tipo').value;
+  const imp  = document.getElementById('endpage-imp').value;
+  const p    = P();
+  let total  = tipo === 'color' ? p.ep_color : p.ep_blancas;
+  if (imp === 'con') total += p.ep_imp;
+  return total;
+}
+function getPPerso() { return P()['ph_' + document.getElementById('pers-hojas').value] || 0; }
+function getPTinta() {
+  const v = document.getElementById('pers-hojas').value;
+  if (v === 'blancas') return 0;
+  const h  = document.getElementById('hojas').value;
+  const tipo = document.getElementById('tinta-tipo')?.value || 'color';
+  const p  = P();
+  const key = tipo === 'mono' ? 'tinta_mono_' : 'tinta_color_';
+  return p[key + h] || 0;
+}
+function getEsqPrecio() {
+  const tam = document.getElementById('esq-tam')?.value || '3x3';
+  return tam === '1.5x1.5' ? P().esq15 : P().esq3;
+}
+function fmt(n) { return n !== undefined && n !== null ? '$ ' + n.toLocaleString('es-CL') : '$ —'; }
 
-// ── RESUMEN ───────────────────────────────────────────────────
+// ── RESUMEN ────────────────────────────────────────────────────
 function updateResumen() {
   const lista = document.getElementById('resumen-lista');
   lista.innerHTML = '';
 
-  const mat    = document.getElementById('mat').value || '—';
-  const sub1   = document.getElementById('mat-sub1').value || '';
-  const sub2   = document.getElementById('mat-sub2').value || '';
-  const tam    = document.getElementById('tamanio').value;
-  const tamLbl = tam === 'a5' ? 'A5 — 210×148mm' : 'Medio-Medio Oficio — 165×108mm';
-  const gLbl   = tam === 'a5' ? '75 gr/m²' : '70 gr/m²';
+  const p    = P();
+  const mat  = document.getElementById('mat').value || '—';
+  const sub1 = document.getElementById('mat-sub1').value || '';
+  const sub2 = document.getElementById('mat-sub2').value || '';
+  const t    = document.getElementById('tamanio').value;
+  const tamLbl = t === 'a5' ? 'Medio Oficio / A5 — 210×148 mm' : 'Medio-Medio Oficio — 165×108 mm';
   const hojSel = document.getElementById('hojas');
-  const hojLbl = hojSel.options[hojSel.selectedIndex]?.text || '';
+  const hojLbl = hojSel.options[hojSel.selectedIndex]?.text.replace(' ★','') || '';
   const phSel  = document.getElementById('pers-hojas');
-  const phLbl  = phSel.options[phSel.selectedIndex]?.text || '';
+  const phLbl  = phSel.options[phSel.selectedIndex]?.text.replace(' ★','') || '';
   const bSel   = document.getElementById('base-selector');
-  const phDisp = phSel.value === 'base' ? phLbl + ': ' + (bSel.options[bSel.selectedIndex]?.text || '') : phLbl;
-  const matLbl = [mat, sub1, sub2].filter(Boolean).join(' › ');
+  const phDisp = phSel.value === 'base' ? (bSel.options[bSel.selectedIndex]?.text.replace(' ★','') || '') : phLbl;
+  const matLbl = [mat, sub1, sub2].map(s=>s.replace(' ★','')).filter(Boolean).join(' › ');
 
-  const pM = getPMat(), pT = getPTam(), pH = getPHojas(), pP = getPPerso();
-  let total  = P.base + pM + pT + pH + pP;
+  // Endpages
+  const epTipo = document.getElementById('endpage-tipo');
+  const epColor= document.getElementById('endpage-color');
+  const epImp  = document.getElementById('endpage-imp');
+  let epLbl    = epTipo.options[epTipo.selectedIndex]?.text.replace(' ★','') || '';
+  if (epTipo.value === 'color') epLbl += ' — ' + (epColor.options[epColor.selectedIndex]?.text.replace(' ★','') || '');
+  if (epImp.value === 'con') epLbl += ' · con impresión';
+
+  const pM = getPMat(), pH = getPHojas(), pE = getPEndpages(), pP = getPPerso(), pT = getPTinta();
+  let total = p.base + pM + pH + pE + pP + pT;
 
   const rows = [
-    {label:'Armado y encuadernación', valor:'Precio base',              precio:P.base},
-    {label:'Material de tapa',        valor:matLbl,                     precio:pM},
-    {label:'Tamaño',                  valor:tamLbl,                     precio:pT},
-    {label:'Hojas',                   valor:hojLbl + ' · ' + gLbl,     precio:pH},
-    {label:'Diseño de hojas',         valor:phDisp,                     precio:pP},
+    {label:'Armado y encuadernación', valor:'Precio base',     precio:p.base},
+    {label:'Tamaño',                  valor:tamLbl,            precio:0, noPrice:true},
+    {label:'Cantidad de hojas',       valor:hojLbl + ' · 75 gr/m²', precio:pH},
+    {label:'Material de tapa',        valor:matLbl,            precio:pM},
+    {label:'Endpages',                valor:epLbl,             precio:pE},
+    {label:'Diseño de hojas',         valor:phDisp,            precio:pP},
+    {label:'Tinta de impresión',      valor:pT===0?'Sin tinta (hojas blancas)': (document.getElementById('tinta-tipo')?.value==='mono'?'Monocromo':'A color'), precio:pT, hide:pT===0},
   ];
+
   rows.forEach(r => {
-    lista.insertAdjacentHTML('beforeend',
-      `<div class="resumen-item">
-        <div class="ri-left"><span class="label">${r.label}</span><span class="valor">${r.valor}</span></div>
-        <span class="precio-item">${fmt(r.precio)}</span>
-      </div>`);
+    if (r.hide) return;
+    if (r.noPrice) {
+      lista.insertAdjacentHTML('beforeend',
+        `<div class="resumen-item">
+          <div class="ri-left"><span class="label">${r.label}</span><span class="valor">${r.valor}</span></div>
+          <span class="precio-item" style="color:#aaa">incl.</span>
+        </div>`);
+    } else {
+      lista.insertAdjacentHTML('beforeend',
+        `<div class="resumen-item">
+          <div class="ri-left"><span class="label">${r.label}</span><span class="valor">${r.valor}</span></div>
+          <span class="precio-item">${fmt(r.precio)}</span>
+        </div>`);
+    }
   });
 
   const accs = getAccSel();
   if (accs.length > 0) {
     lista.insertAdjacentHTML('beforeend', '<div class="resumen-divider"></div>');
     accs.forEach(a => {
-      const color = document.getElementById('acc-'+a.id)?.querySelector('select')?.value || '';
-      const p = P[a.pk] || 0; total += p;
+      const accEl = document.getElementById('acc-'+a.id);
+      const selects = accEl?.querySelectorAll('select') || [];
+      const colorVal = (selects[selects.length-1]?.value || '').replace(' ★','');
+      let extra = colorVal;
+      // esq: mostrar tamaño
+      if (a.id === 'esq') {
+        const tam = document.getElementById('esq-tam')?.value.replace(' ★','') || '';
+        extra = tam + (colorVal ? ' — ' + colorVal : '');
+      }
+      // dije: mostrar diseño
+      if (a.id === 'dije') {
+        const dijeT = document.getElementById('dije-tipo')?.value.replace(' ★','') || '';
+        extra = dijeT + (colorVal ? ' — ' + colorVal : '');
+      }
+      const pp = a.pk === 'esq_pk' ? getEsqPrecio() : (p[a.pk] || 0);
+      total += pp;
       lista.insertAdjacentHTML('beforeend',
         `<div class="resumen-item">
-          <div class="ri-left"><span class="label">+ ${a.label}</span><span class="valor">${color}</span></div>
-          <span class="precio-item">${fmt(p)}</span>
+          <div class="ri-left"><span class="label">+ ${a.label}</span><span class="valor">${extra}</span></div>
+          <span class="precio-item">${fmt(pp)}</span>
         </div>`);
     });
   }
@@ -634,43 +794,56 @@ function updateResumen() {
     </div>`);
   document.getElementById('total-badge').textContent = fmt(total);
 
-  // Progress
+  // Progress (6 secciones principales)
   let done = 0;
+  done += 1; // tamaño siempre ok
+  done += 1; // hojas siempre ok
   if (document.getElementById('mat').value) done++;
-  done += 3;
+  done += 1; // endpages siempre ok
+  done += 1; // diseño hojas siempre ok
   if (accs.length > 0) done++;
-  document.getElementById('progressBar').style.width = Math.round((done/5)*100) + '%';
+  document.getElementById('progressBar').style.width = Math.round((done/6)*100) + '%';
 
   // Card done states
-  const map = {'header-material':!!document.getElementById('mat').value,'header-tamanio':true,'header-hojas':true,'header-pers-hojas':true,'header-accesorios':accs.length>0};
+  const map = {
+    'header-tamanio':true,
+    'header-hojas':true,
+    'header-material':!!document.getElementById('mat').value,
+    'header-endpages':true,
+    'header-pers-hojas':true,
+    'header-accesorios':accs.length>0
+  };
   Object.entries(map).forEach(([id,v]) => document.getElementById(id)?.classList.toggle('done', v));
 }
 
-// ── COPIAR ────────────────────────────────────────────────────
+// ── COPIAR RESUMEN ─────────────────────────────────────────────
 function copiarResumen() {
+  const t    = document.getElementById('tamanio').value;
+  const tamL = t==='a5'?'Medio Oficio / A5 — 210×148 mm':'Medio-Medio Oficio — 165×108 mm';
   const mat  = document.getElementById('mat').value||'—';
   const sub1 = document.getElementById('mat-sub1').value||'';
   const sub2 = document.getElementById('mat-sub2').value||'';
-  const tam  = document.getElementById('tamanio').value;
-  const tamL = tam==='a5'?'A5 — 210×148mm':'Medio-Medio Oficio — 165×108mm';
-  const gL   = tam==='a5'?'75 gr/m²':'70 gr/m²';
   const hS   = document.getElementById('hojas');
   const phS  = document.getElementById('pers-hojas');
+  const epT  = document.getElementById('endpage-tipo');
   const accs = getAccSel();
+
   let txt = '✦ PEDIDO — ANOTA LIBRETAS ✦\n\n';
-  txt += '📚 Material: ' + [mat,sub1,sub2].filter(Boolean).join(' › ') + '\n';
   txt += '📐 Tamaño: ' + tamL + '\n';
-  txt += '📄 Hojas: ' + (hS.options[hS.selectedIndex]?.text||'') + ' · ' + gL + '\n';
-  txt += '🎨 Diseño: ' + (phS.options[phS.selectedIndex]?.text||'') + '\n';
+  txt += '📄 Hojas: ' + (hS.options[hS.selectedIndex]?.text.replace(' ★','') || '') + ' · 75 gr/m²\n';
+  txt += '📚 Material tapa: ' + [mat,sub1,sub2].map(s=>s.replace(' ★','')).filter(Boolean).join(' › ') + '\n';
+  txt += '🗒️ Endpages: ' + (epT.options[epT.selectedIndex]?.text.replace(' ★','') || '') + '\n';
+  txt += '🎨 Diseño hojas: ' + (phS.options[phS.selectedIndex]?.text.replace(' ★','') || '') + '\n';
   if (accs.length > 0) {
     txt += '\n🎀 Accesorios:\n';
     accs.forEach(a => {
-      const c = document.getElementById('acc-'+a.id)?.querySelector('select')?.value||'';
+      const c = document.getElementById('acc-'+a.id)?.querySelector('select')?.value.replace(' ★','')||'';
       txt += '  • ' + a.label + (c ? ' — ' + c : '') + '\n';
     });
   }
   txt += '\n💰 Total estimado: ' + document.getElementById('total-badge').textContent;
   txt += '\n\n⚠️ Precio orientativo. Confirmá el total con Anota Libretas.';
+
   navigator.clipboard.writeText(txt).then(() => {
     const b = event.target.closest('button'), o = b.textContent;
     b.textContent = '✓ ¡Copiado!';
@@ -678,9 +851,10 @@ function copiarResumen() {
   }).catch(() => prompt('Copiá este texto:', txt));
 }
 
-// ── INIT ──────────────────────────────────────────────────────
+// ── INIT ───────────────────────────────────────────────────────
 onMatChange();
 onPersHojasChange();
+onEndpageTipoChange();
 updateResumen();
 </script>
 </body>
