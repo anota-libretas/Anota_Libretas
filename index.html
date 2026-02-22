@@ -24,15 +24,14 @@
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--carbon); min-height: 100vh; overflow-x: hidden; }
 
   /* HEADER */
-  header { background: var(--red); position: relative; overflow: hidden; }
-  header::before { content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px; background:var(--red-light); border-radius:50%; opacity:0.4; }
-  header::after  { content:''; position:absolute; bottom:-40px; left:40px; width:160px; height:160px; background:var(--peach); border-radius:50%; opacity:0.15; }
-  .header-inner  { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:36px 22px 30px; display:flex; align-items:flex-end; gap:18px; }
-  .logo-mark     { width:52px; height:52px; background:var(--peach); border-radius:14px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:24px; color:var(--red); font-weight:700; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-  .header-text h1{ font-family:'Playfair Display',serif; font-size:clamp(20px,5vw,30px); color:var(--white); letter-spacing:-0.5px; line-height:1.1; }
-  .header-text p { color:rgba(255,255,255,0.72); font-size:12px; margin-top:4px; font-weight:300; }
-  .progress-bar-wrap { background:var(--red-light); height:4px; }
-  .progress-bar-fill { height:4px; background:var(--peach); transition:width 0.5s cubic-bezier(.4,0,.2,1); width:0%; }
+  header { background: #5ab8bf; position: relative; overflow: hidden; }
+  header::before { display:none; }
+  header::after  { display:none; }
+  .header-inner  { position:relative; z-index:1; max-width:780px; margin:0 auto; padding:0; display:flex; align-items:center; justify-content:center; }
+  .header-inner img { display:block; max-height:90px; width:auto; }
+  .logo-mark     { display:none; }
+  .header-text   { display:none; }
+  .progress-bar-wrap { background: #4aa6ad; height:4px; }
 
   main { max-width:780px; margin:0 auto; padding:20px 14px 60px; display:flex; flex-direction:column; gap:14px; }
 
@@ -151,13 +150,8 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo-mark">A</div>
-    <div class="header-text">
-      <h1>Anota Libretas</h1>
-      <p>Personaliza tu libreta o agenda ✦ Cada detalle a tu gusto ₍^. .^₎⟆</p>
-    </div>
+    <img src="assets/Logo largo . azul.png" alt="Anota Libretas">
   </div>
-  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
 </header>
 
 <main>
