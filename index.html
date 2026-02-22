@@ -28,7 +28,7 @@
   header::before { display:none; }
   header::after  { display:none; }
   .header-inner  { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:0; display:flex; align-items:center; justify-content:center; line-height:0; font-size:0; }
-  .header-inner img { display:block; width:100%; max-width:640px; height:auto; border:none; outline:none; vertical-align:bottom; }
+  .header-inner img { display:block; width:calc(100% + 2px); max-width:640px; height:auto; border:none; outline:none; vertical-align:bottom; margin-left:-1px; margin-right:-1px; }
   .logo-mark     { display:none; }
   .header-text   { display:none; }
   .progress-bar-wrap { background: #4aa6ad; height:4px; }
