@@ -35,7 +35,14 @@
     padding: 0;
     display: flex;
     align-items: center;
-    justify-content: center;}
+    justify-content: center;
+    /* ... tus propiedades existentes ... */
+    overflow: hidden;                  /* recorta cualquier desborde subpíxel */
+    width: 100%;                       /* asegura que ocupe todo el ancho real */
+    will-change: transform;            /* fuerza GPU y evita artefactos */
+    transform: translate3d(0,0,0);     /* truco clásico para limpiar bordes en móvil */
+    backface-visibility: hidden;       /* ayuda en iOS/Safari */
+    -webkit-backface-visibility: hidden;}
   .header-inner img {
     display: block;
     width: 100%;
@@ -43,7 +50,12 @@
     border: none;
     outline: none;
     vertical-align: bottom;
-  /* ya no necesitas los márgenes negativos ni el calc */}
+    /* ya no necesitas los márgenes negativos ni el calc */
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: translateZ(0);          /* fuerza composición por GPU */
+    -webkit-transform: translateZ(0);}
   .logo-mark     { display:none; }
   .header-text   { display:none; }
   .progress-bar-wrap { background: #4aa6ad; height:4px; }
@@ -170,7 +182,7 @@
 </header>
 
 <div style="text-align:center; font-size:12px; color:#555; padding:12px 0 20px; max-width:780px; margin:0 auto;">
-  © 2026 Anota Libretas • v5.0.6
+  © 2026 Anota Libretas • v5.0.7
 </div>
   
 <main>
