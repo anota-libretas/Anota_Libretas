@@ -155,7 +155,7 @@
 </header>
 
 <div style="text-align:center; font-size:12px; color:#555; padding:12px 0 12px; max-width:780px; margin:0 auto;">
-  © 2026 Anota Libretas • v5.1.3
+  © 2026 Anota Libretas • v5.1.4
 </div>
   
 <main>
@@ -384,20 +384,6 @@
         </div>
       </div>
 
-      <div class="accesorio-item" id="acc-porta-cierre">
-        <div class="acc-header" onclick="toggleAcc('porta-cierre')">
-          <div class="toggle-switch"></div>
-          <span class="accesorio-name">Portalápiz 3D integrado en cierre elástico</span>
-          <span class="acc-muestra">🔗 Ver muestra</span>
-        </div>
-        <div class="accesorio-detail">
-          <div class="select-group">
-            <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Negro ★</option><option>Celeste</option><option>Otro (consultar)</option></select>
-          </div>
-        </div>
-      </div>
-
       <div class="accesorio-item" id="acc-cinta">
         <div class="acc-header" onclick="toggleAcc('cinta')">
           <div class="toggle-switch"></div>
@@ -408,42 +394,6 @@
           <div class="select-group">
             <label><span class="lvl">◦</span>Color</label>
             <select onchange="updateResumen()"><option>Beige ★</option><option>Celeste</option><option>Negro</option><option>Rojo</option><option>Otro (consultar)</option></select>
-          </div>
-        </div>
-      </div>
-
-      <div class="accesorio-item" id="acc-dije">
-        <div class="acc-header" onclick="toggleAcc('dije')">
-          <div class="toggle-switch"></div>
-          <span class="accesorio-name">Dije 3D para elástico (impreso en 3D)</span>
-          <span class="acc-muestra">🔗 Ver muestra</span>
-        </div>
-        <div class="accesorio-detail">
-          <div class="select-group">
-            <label><span class="lvl">▸</span>Diseño</label>
-            <select id="dije-tipo" onchange="updateResumen()">
-              <option value="Hello Kitty">Hello Kitty</option>
-              <option value="Texto 2026" selected>Texto 2026 ★</option>
-              <option value="Otro (consultar)">Otro (consultar)</option>
-            </select>
-          </div>
-          <div class="select-group" style="margin-top:8px">
-            <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Dorado ★</option><option>Plateado</option><option>Rosado</option><option>Otro (consultar)</option></select>
-          </div>
-        </div>
-      </div>
-
-      <div class="accesorio-item" id="acc-llavero">
-        <div class="acc-header" onclick="toggleAcc('llavero')">
-          <div class="toggle-switch"></div>
-          <span class="accesorio-name">Elástico para colgar llaveros</span>
-          <span class="acc-muestra">🔗 Ver muestra</span>
-        </div>
-        <div class="accesorio-detail">
-          <div class="select-group">
-            <label><span class="lvl">◦</span>Color</label>
-            <select onchange="updateResumen()"><option>Celeste ★</option><option>Negro</option><option>Otro (consultar)</option></select>
           </div>
         </div>
       </div>
@@ -636,10 +586,7 @@ const ACC_LIST = [
   {id:'esq',         label:'Esquineras metálicas (x4)',           pk:'esq_pk'},
   {id:'cierre',      label:'Cierre elástico',                     pk:'cierre'},
   {id:'portalapiz',  label:'Elástico portalápiz',                 pk:'portalapiz'},
-  {id:'porta-cierre',label:'Portalápiz 3D en cierre',             pk:'porta_cierre'},
   {id:'cinta',       label:'Cinta marcapáginas',                  pk:'cinta'},
-  {id:'dije',        label:'Dije 3D para elástico',               pk:'dije'},
-  {id:'llavero',     label:'Elástico para colgar llaveros',       pk:'cierre'}, // mismo precio que cierre (consultar, no en tabla)
 ];
 
 function getAccSel() {
@@ -768,11 +715,6 @@ function updateResumen() {
       if (a.id === 'esq') {
         const tam = document.getElementById('esq-tam')?.value.replace(' ★','') || '';
         extra = tam + (colorVal ? ' — ' + colorVal : '');
-      }
-      // dije: mostrar diseño
-      if (a.id === 'dije') {
-        const dijeT = document.getElementById('dije-tipo')?.value.replace(' ★','') || '';
-        extra = dijeT + (colorVal ? ' — ' + colorVal : '');
       }
       const pp = a.pk === 'esq_pk' ? getEsqPrecio() : (p[a.pk] || 0);
       total += pp;
