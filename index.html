@@ -24,7 +24,10 @@
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--carbon); min-height: 100vh; overflow-x: hidden; }
 
   /* HEADER */
-  header { background: #5ab8bf; position: relative; overflow: hidden; }
+  header { background: #5ab8bf;
+  position: relative;
+  overflow: hidden;               /* ← mueve overflow aquí también */
+  transform: translateZ(0);       /* GPU en el contenedor padre */}
   header::before { display:none; }
   header::after  { display:none; }
   .header-inner {
@@ -39,13 +42,14 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
-  .header-inner img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transform: translateZ(0);       /* más GPU forcing */
-  -webkit-transform: translateZ(0);
-}
+   .header-inner img {
+    display: block;
+    width: 100%;
+    height: auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .logo-mark     { display:none; }
   .header-text   { display:none; }
   .progress-bar-wrap { background: #4aa6ad; height:4px; }
@@ -172,7 +176,7 @@
 </header>
 
 <div style="text-align:center; font-size:12px; color:#555; padding:12px 0 20px; max-width:780px; margin:0 auto;">
-  © 2026 Anota Libretas • v5.0.8
+  © 2026 Anota Libretas • v5.0.9
 </div>
   
 <main>
