@@ -144,10 +144,47 @@
 
   @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   @media print { header::before,header::after{display:none} .card,.precio-section{box-shadow:none;border:1px solid #ddd} .btn-row{display:none} }
+
+  /* BURBUJA FLOTANTE DE PRECIO */
+  #floating-precio {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: var(--red);
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 18px;
+    border-radius: 22px;
+    border: none;
+    box-shadow: 0 6px 24px rgba(163,45,41,0.40);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+    pointer-events: none;
+  }
+  #floating-precio .fp-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    opacity: 0.85;
+    margin-bottom: 2px;
+  }
+  @media print { #floating-precio { display: none; } }
 </style>
 </head>
 <body>
 
+<div id="floating-precio">
+  <span class="fp-label">Total estimado</span>
+  <span id="floating-total">$ —</span>
+</div>
+  
 <header>
   <div class="header-inner">
     <img src="assets/Header Fondo Azul.png" alt="Anota Libretas">
@@ -155,7 +192,7 @@
 </header>
 
 <div style="text-align:center; font-size:12px; color:#555; padding:12px 0 12px; max-width:780px; margin:0 auto;">
-  © 2026 Anota Libretas • v5.1.4
+  © 2026 Anota Libretas • v5.1.5
 </div>
   
 <main>
@@ -732,6 +769,7 @@ function updateResumen() {
       <span class="total-precio">${fmt(total)}</span>
     </div>`);
   document.getElementById('total-badge').textContent = fmt(total);
+  document.getElementById('floating-total').textContent = fmt(total);
 
   // Progress (6 secciones principales)
   let done = 0;
