@@ -588,14 +588,14 @@ function P() { return document.getElementById('tamanio').value === 'a5' ? P_A5 :
 
 // ── DATOS CASCADA MATERIAL ─────────────────────────────────────
 const matSub1 = {
-  'Crea cruda':   ['Sin teñir ★','Color vegetal'],
+  'Crea cruda':   ['Sin teñir ★','Teñido con anilina'],
   'Lino':         ['Color sólido ★','Patrones','Lino velvet sólido'],
   'Ecocuero':     ['Café claro ★','Negro','Otro (consultar)'],
   'Papel couché': ['Blanco sin impresión','Impresión simple','Impresión completa ★'],
 };
 const matSub2 = {
   'Crea cruda|Sin teñir ★':                     null,
-  'Crea cruda|Color vegetal':                   ['Naranja','Rojo ★','Otro (consultar)'],
+  'Crea cruda|Teñido con anilina':              ['Naranja','Rojo ★','Otro (consultar)'],
   'Lino|Color sólido ★':                        ['Beige ★','Otro (consultar)'],
   'Lino|Patrones':                              ['Franjas rojas y blancas ★','Otro (consultar)'],
   'Lino|Lino velvet sólido':                    ['Blanco ★','Otro (consultar)'],
@@ -611,7 +611,7 @@ const matDef  = {
   'Ecocuero':'Café claro ★','Papel couché':'Impresión completa ★'
 };
 const sub2Def = {
-  'Crea cruda|Color vegetal':'Rojo ★',
+  'Crea cruda|Teñido con anilina':'Rojo ★',
   'Lino|Color sólido ★':'Beige ★',
   'Lino|Patrones':'Franjas rojas y blancas ★',
   'Lino|Lino velvet sólido':'Blanco ★',
@@ -733,7 +733,7 @@ function getPMat() {
   if (!mat) return 0;
   if (mat === 'Crea cruda') {
     let base = p.crea;
-    if (sub1 === 'Color vegetal') base += p.crea_veg;
+    if (sub1 === 'Teñido con anilina') base += p.crea_veg;
     return base;
   }
   if (mat === 'Lino') {
