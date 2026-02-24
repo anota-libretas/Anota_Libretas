@@ -217,6 +217,11 @@
   }
   .overlay-no-image span { font-size:48px; }
   .overlay-no-image p { font-size:14px; line-height:1.5; max-width:260px; }
+  option:disabled {
+    color: #bbb;
+    background: #f5f5f5;
+    font-style: italic;
+  }
   @media print { header::before,header::after{display:none} .card,.precio-section{box-shadow:none;border:1px solid #ddd} .btn-row{display:none} }
 
   /* BURBUJA FLOTANTE DE PRECIO */
@@ -278,7 +283,7 @@
 </header>
 
 <div style="text-align:center; font-size:12px; color:#555; padding:12px 0 12px; max-width:780px; margin:0 auto;">
-  © 2026 Anota Libretas • v6.0.0
+  © 2026 Anota Libretas • v7.0.0
 </div>
   
 <main>
@@ -337,7 +342,7 @@
             <option value="">— Elija —</option>
             <option value="Crea cruda">Crea cruda</option>
             <option value="Lino" selected>Lino ★</option>
-            <option value="Ecocuero">Ecocuero</option>
+            <option value="Ecocuero" disabled>Ecocuero — No disponible por ahora. Consultar por mensaje.</option>
             <option value="Papel couché">Papel couché</option>
           </select>
         </div>
@@ -391,7 +396,7 @@
           <label><span class="lvl">▸</span>Impresión</label>
           <select id="endpage-imp" onchange="updateResumen()">
             <option value="sin" selected>Sin impresión ★</option>
-            <option value="con">Con impresión</option>
+            <option value="con" disabled>Con impresión — No disponible por ahora. Consultar por mensaje.</option>
           </select>
         </div>
       </div>
@@ -416,7 +421,7 @@
           <label><span class="lvl">◆</span>Tipo de personalización</label>
           <select id="pers-hojas" onchange="onPersHojasChange()">
             <option value="blancas">Hojas blancas</option>
-            <option value="base">Usar solo una base</option>
+            <option value="base" disabled>Usar solo una base — No disponible por ahora. Consultar por mensaje.</option>
             <option value="patron" selected>Personalizar patrón (hasta 5) ★</option>
             <option value="todas">Personalizar todas las hojas</option>
           </select>
@@ -477,8 +482,8 @@
           <div class="select-group">
             <label><span class="lvl">▸</span>Tamaño</label>
             <select id="esq-tam" onchange="updateResumen()">
-              <option value="3x3">Grandes 3×3 cm ★</option>
-              <option value="1.5x1.5">Pequeñas 1.5×1.5 cm</option>
+              <option value="3x3" disabled>Grandes 3×3 cm — No disponible por ahora. Consultar por mensaje.</option>
+              <option value="1.5x1.5" selected>Pequeñas 1.5×1.5 cm ★</option>
             </select>
           </div>
           <div class="select-group" style="margin-top:8px">
@@ -651,6 +656,15 @@ function onMatChange() {
   if (!mat) { updateResumen(); return; }
   poblarSelect(s1, matSub1[mat] || [], matDef[mat]);
   setActive(s1, true);
+  // Deshabilitar sub-opciones no disponibles
+  if (mat === 'Crea cruda') {
+    Array.from(s1.options).forEach(opt => {
+      if (opt.value === 'Teñido con anilina') {
+        opt.disabled = true;
+        opt.text = 'Teñido con anilina — No disponible por ahora. Consultar por mensaje.';
+      }
+    });
+  }
   onMatSub1Change();
 }
 
