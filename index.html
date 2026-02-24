@@ -334,7 +334,7 @@
         <div class="select-group">
           <label><span class="lvl">◆</span>Material</label>
           <select id="mat" onchange="onMatChange()">
-            <option value="">— Elegí —</option>
+            <option value="">— Elija —</option>
             <option value="Crea cruda">Crea cruda</option>
             <option value="Lino" selected>Lino ★</option>
             <option value="Ecocuero">Ecocuero</option>
@@ -344,13 +344,13 @@
         <div class="select-group">
           <label><span class="lvl">▸</span>Sub-opción</label>
           <select id="mat-sub1" onchange="onMatSub1Change()" class="inactive">
-            <option value="">— Primero elegí material —</option>
+            <option value="">— Primero elija material —</option>
           </select>
         </div>
         <div class="select-group">
           <label><span class="lvl">◦</span>Variante / Color</label>
           <select id="mat-sub2" onchange="updateResumen()" class="inactive">
-            <option value="">— Primero elegí sub-opción —</option>
+            <option value="">— Primero elija sub-opción —</option>
           </select>
           <p class="empty-hint" id="hint-mat-sub2">Esta opción no tiene variantes adicionales.</p>
         </div>
@@ -396,7 +396,7 @@
         </div>
       </div>
       <div class="info-box" id="endpage-imp-info" style="display:none">
-        📎 Si elegís endpages con impresión, enviá el diseño luego en el chat de la tienda.
+        📎 Si elige endpages con impresión, enviá el diseño luego en el chat de la tienda.
       </div>
       <button class="catalog-btn" onclick="abrirCatalogo('', 'Ejemplos de endpages')">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="13" height="10" rx="2" stroke="white" stroke-width="1.4"/><circle cx="5" cy="5.5" r="1.2" fill="white"/><path d="M1.5 10L5 6.5L7.5 9L10 7L13.5 11" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -422,7 +422,7 @@
           </select>
         </div>
         <div class="select-group" id="group-base-selector" style="display:none">
-          <label><span class="lvl">▸</span>Elegí la base</label>
+          <label><span class="lvl">▸</span>Elija la base</label>
           <select id="base-selector" onchange="updateResumen()">
             <option value="Base 1 - Agenda 2026">Base 1 — Agenda 2026</option>
             <option value="Base 2 - Franjas 3mm" selected>Base 2 — Franjas 3 mm ★</option>
@@ -643,8 +643,8 @@ function onMatChange() {
   const info = document.getElementById('papel-info');
 
   hint.style.display = 'none';
-  s1.innerHTML = '<option value="">— Elegí sub-opción —</option>';
-  s2.innerHTML = '<option value="">— Elegí variante —</option>';
+  s1.innerHTML = '<option value="">— Elija sub-opción —</option>';
+  s2.innerHTML = '<option value="">— Elija variante —</option>';
   setActive(s1, false); setActive(s2, false);
   info.style.display = mat === 'Papel couché' ? 'block' : 'none';
 
@@ -661,7 +661,7 @@ function onMatSub1Change() {
   const hint = document.getElementById('hint-mat-sub2');
 
   hint.style.display = 'none';
-  s2.innerHTML = '<option value="">— Elegí variante —</option>';
+  s2.innerHTML = '<option value="">— Elija variante —</option>';
   setActive(s2, false);
 
   if (!sub1) { updateResumen(); return; }
