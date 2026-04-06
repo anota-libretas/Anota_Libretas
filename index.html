@@ -309,7 +309,7 @@
         <div class="select-group">
           <label><span class="lvl">◆</span>Grosor de la tapa</label>
           <select id="grosor-tapa" onchange="onGrosorChange()">
-            <option value="2mm">2mm (Recomendado)</option>
+            <option value="1.5mm">1.5mm (Recomendado)</option>
             <option value="3mm">3mm</option>
           </select>
           <p id="grosor-warning" style="display:none; color:#b06a00; font-size:11.5px; padding:5px 4px 0; font-weight:500; line-height:1.4;">⚠️ Has elegido un grosor no recomendado para el tamaño de tu libreta.</p>
@@ -722,8 +722,8 @@ function updateGrosorOptions() {
   const cur = sel.value;
   sel.innerHTML = '';
   const opts = t === 'a5'
-    ? [{v:'2mm',l:'2mm'},{v:'3mm',l:'3mm (Recomendado)'}]
-    : [{v:'2mm',l:'2mm (Recomendado)'},{v:'3mm',l:'3mm'}];
+    ? [{v:'1.5mm',l:'1.5mm'},{v:'3mm',l:'3mm (Recomendado)'}]
+    : [{v:'1.5mm',l:'1.5mm (Recomendado)'},{v:'3mm',l:'3mm'}];
   opts.forEach(o => {
     const op = document.createElement('option');
     op.value = o.v; op.textContent = o.l; sel.appendChild(op);
@@ -736,7 +736,7 @@ function onGrosorChange() {
   const t = document.getElementById('tamanio').value;
   const g = document.getElementById('grosor-tapa').value;
   const warn = document.getElementById('grosor-warning');
-  const isRecomendado = (t === 'a5' && g === '3mm') || (t !== 'a5' && g === '2mm');
+  const isRecomendado = (t === 'a5' && g === '3mm') || (t !== 'a5' && g === '1.5mm');
   warn.style.display = isRecomendado ? 'none' : 'block';
   updateResumen();
 }
